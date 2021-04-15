@@ -6,12 +6,14 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using System;
 
+[RequireComponent(typeof(ARRaycastManager))]
+[RequireComponent(typeof(ARUserInterface))]
 public class ARTapToPlaceObject : MonoBehaviour
 {
-    [SerializeField]
+    
     private ARRaycastManager aRRaycastManager;
     
-    [SerializeField]
+    
     private ARUserInterface aRUserInterface;
 
     [SerializeField]
@@ -20,20 +22,20 @@ public class ARTapToPlaceObject : MonoBehaviour
     [SerializeField]
     private GameObject arObjectToSpawn;
     
-    
-
-    private GameObject spawnedObject;
+    GameObject spawnedObject;
     private Pose PlacementPose;
     private bool placementPoseIsValid = false;
 
-    void Start() {
+    private void Awake() {
+        aRRaycastManager = GetComponent<ARRaycastManager>();
+        aRUserInterface = GetComponent<ARUserInterface>();
     }
+
 
     void Update() {
         if (spawnedObject == null && placementPoseIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
-            ARPlaceObject();
-            placementPoseIsValid = false;
-            aRUserInterface.SetDnaInterfaceVisible(true);
+            ARPlaceObject(arObjectToSpawn);
+            
         }
 
         // if (spawnedObject != null && placementPoseIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
@@ -64,19 +66,58 @@ public class ARTapToPlaceObject : MonoBehaviour
         var screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
         var hits = new List<ARRaycastHit>();
         aRRaycastManager.Raycast(screenCenter, hits, TrackableType.Planes);
-
         placementPoseIsValid = hits.Count > 0;
+
         if (placementPoseIsValid) {
             PlacementPose = hits[0].pose;
             
 		}
 	}
 
-    void ARPlaceObject() {
+    public void ARPlaceObject(GameObject ARObjt ) {
         
-        spawnedObject = Instantiate(arObjectToSpawn, PlacementPose.position, PlacementPose.rotation);
-        
+        if(spawnedObject == null) {
+            spawnedObject = Instantiate(ARObjt, PlacementPose.position, PlacementPose.rotation);
+            placementPoseIsValid = false;
+        } //else {
+        //     Destroy(spawnedObject);
+        //     spawnedObject = null;
+        //      spawnedObject = Instantiate(ARObjt, PlacementPose.position, PlacementPose.rotation);
+        // }
+
     }
+
+    public void TrocarObjetoAR(int num) {
+        if (num == 1) {
+            spawnedObject.transform.GetChild(0).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(2).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(3).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(num).gameObject.SetActive(true);    
+        }else if (num == 2) {
+            spawnedObject.transform.GetChild(0).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(1).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(3).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(num).gameObject.SetActive(true);    
+            
+        }else if (num == 3) {
+            spawnedObject.transform.GetChild(0).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(1).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(2).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(num).gameObject.SetActive(true);    
+        }else{
+            spawnedObject.transform.GetChild(1).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(2).gameObject.SetActive(false);
+            spawnedObject.transform.GetChild(3).gameObject.SetActive(false);  
+            spawnedObject.transform.GetChild(0).gameObject.SetActive(true);
+            
+        }
+    }
+
+    // public void TrocaDeObjeto(GameObject Troca) {
+    //     Destroy(spawnedObject);
+    //     spawnedObject = Instantiate(Troca, PlacementPose.position, PlacementPose.rotation);
+    // }
+
 
     void UpdateObjectPosition() {
         

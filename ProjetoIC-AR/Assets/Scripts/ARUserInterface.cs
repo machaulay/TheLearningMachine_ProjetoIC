@@ -9,14 +9,54 @@ public class ARUserInterface : MonoBehaviour
 {
 
     public ARPlaneManager planeManager;
+    private ARTapToPlaceObject ArTapToPlaceObject;
     public bool arMode;
+    public static bool dnaInterface;
 
     public GameObject uiCoaching; 
     public GameObject uiMain; 
     public GameObject uiDna; 
 
+    
+    public GameObject Panel;
+
+    public Text txtPanel;
+
+    public Button botao1;
+    public Button botao2;
+    public Button botao3;
+
+    public GameObject dnaObjt01;
+    public GameObject dnaObjt02;
+    public GameObject dnaObjt03;
+
+
     void Start() {
+        ArTapToPlaceObject = this.GetComponent<ARTapToPlaceObject>();
         arMode = false;
+        dnaInterface = false;
+        Panel.SetActive(false);
+
+        botao1.onClick.AddListener(delegate {AddText(1); });
+        botao2.onClick.AddListener(delegate {AddText(2); });
+        botao3.onClick.AddListener(delegate {AddText(3); });
+    }
+
+    void AddText(int Id) {
+
+        if(Id == 1) {
+            ArTapToPlaceObject.TrocarObjetoAR(1);
+            // txtPanel.text = "Teste do botão 1";
+            // Panel.SetActive(true);
+        }else if (Id == 2) {
+            ArTapToPlaceObject.TrocarObjetoAR(2);
+            // txtPanel.text = "Teste do botão 2";
+            // Panel.SetActive(true);
+        }else {
+            ArTapToPlaceObject.TrocarObjetoAR(3);
+            // txtPanel.text = "Teste do botão 3";
+            // Panel.SetActive(true);
+        }
     }
 
     void Update() {
@@ -32,6 +72,11 @@ public class ARUserInterface : MonoBehaviour
             SetCoachingUIVisible(true);
             SetMainUIVisible(false);
             SetDnaInterfaceVisible(false);
+        }
+
+
+        if(dnaInterface) {
+            SetDnaInterfaceVisible(true);
         }
     }
 
@@ -73,8 +118,9 @@ public class ARUserInterface : MonoBehaviour
         
     }
 
-    public void ResetaCena(string cena) {
-        SceneManager.LoadScene(cena);
+
+    public void ResetaDna() {
+        ArTapToPlaceObject.TrocarObjetoAR(4);
     }
 
 }

@@ -2,59 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+
+
+[RequireComponent(typeof(ARRaycastManager))]
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField]
-    ARRaycastManager m_RaycastManager;
+    
+    public GameObject spawnablePrefab;
+
+    
+    private GameObject spawnedObject;
+    private ARRaycastManager m_RaycastManager;
+    private Vector2 touchPosition;
+
     List<ARRaycastHit> m_Hits = new List<ARRaycastHit>();
 
-    [SerializeField]
-    GameObject spawnablePrefab;
+    private void Awake() {
+        m_RaycastManager = GetComponent<ARRaycastManager>();
+    }
 
-    GameObject spawnedObject;
+    bool TryGetTouchPosition(out Vector2 touchPosition) {
 
-    [SerializeField]
-    private Button botaoTroca;
-    private ARPlaneManager aRPlaneManager;
+        if (Input.touchCount > 0) {
+            touchPosition = Input.GetTouch(0).position;
+            return true;
+        }
+
+        touchPosition = default;
+        return false;
+    }
+
     
 
-    private void Awake() {
-        aRPlaneManager = GetComponent<ARPlaneManager>();
-    }
-    void Start() {
-        spawnedObject = null;
-    }
-
     void Update() {
-        //Caso não haja toque returna para não gastar processamento
-        if (Input.touchCount == 0)
+
+        if (!TryGetTouchPosition(out Vector2 touchPosition)) {
             return;
+        }
 
-        if (m_RaycastManager.Raycast(Input.GetTouch(0).position, m_Hits)) {
-            
-            if (Input.GetTouch(0).phase == TouchPhase.Began) {
+        if (m_RaycastManager.Raycast(touchPosition, m_Hits, TrackableType.PlaneWithinPolygon)) {
 
-                //passa a posição para o método spawnar o prefab
-                SpawnPrefab(m_Hits[0].pose.position);
-            }else if(Input.GetTouch(0).phase == TouchPhase.Moved && spawnedObject == null) {
-                spawnedObject.transform.position = m_Hits[0].pose.position;
-            }
+            var hitPose = m_Hits[0].pose;
 
-            if(Input.GetTouch(0).phase == TouchPhase.Ended) {
-                spawnedObject = null;
+            if (spawnedObject == null) {
+                spawnedObject = Instantiate(spawnablePrefab, hitPose.position, hitPose.rotation);
+            }else{
+                spawnedObject.transform.position = hitPose.position;
             }
         }
 
     }
 
-    //Spawna o prefab
-    void SpawnPrefab(Vector3 spawnPosition) {
-
-        spawnedObject = Instantiate(spawnablePrefab, spawnPosition, Quaternion.identity);
-    }
+  
 
 
     

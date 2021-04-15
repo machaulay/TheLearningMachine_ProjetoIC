@@ -6,27 +6,52 @@ using UnityEngine.XR.ARSubsystems;
 
 public class ARTapToInteract : MonoBehaviour
 {
-    private ARUserInterface m_ARUserInterface;
+    public float rotateSpeed = 1000f;
+    private float _startingPosition;
 
-    [SerializeField]
-    ARRaycastManager m_RaycastManager;
-    List<ARRaycastHit> m_Hits = new List<ARRaycastHit>();
-
-    [SerializeField]
-    private Camera arCamera;
-
-
-    void Start() {
-        m_RaycastManager = FindObjectOfType<ARRaycastManager>();
-        m_ARUserInterface = FindObjectOfType<ARUserInterface>();
-    }
+    GameObject interfaceScript;
 
     void Update() {
+        if(Input.touchCount > 0) {
+
+            
+
+            Touch touch = Input.GetTouch(0);
+            switch (touch.phase) {
+
+                case TouchPhase.Began:
+                    _startingPosition = touch.position.x;
+                    break;
+                case TouchPhase.Moved:
+                    if(_startingPosition > touch.position.x) {
+
+                        transform.Rotate(Vector3.up, -rotateSpeed * Time.deltaTime);                 
+                    }else if(_startingPosition < touch.position.x) {
+
+                        transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime);
+                    }
+                    break;
+                case TouchPhase.Ended:
+                    Debug.Log("Tirou o dedo da tela.");
+                    break;
+            }
+
+            if(Input.GetTouch(0).phase == TouchPhase.Began) {
+
+                Ray raycast = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+
+                RaycastHit raycastHit;
+
+                if (Physics.Raycast(raycast, out raycastHit)) {
+
+                    if(raycastHit.collider.CompareTag("dna")) {
+                        
+                        ARUserInterface.dnaInterface = true;
+                    }
+                }
+            }
+        }
+
 
     }
-
-    
-
-    
-
 }
