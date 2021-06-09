@@ -9,8 +9,46 @@ public class ARTapToInteract : MonoBehaviour
     public float rotateSpeed = 1000f;
     private float _startingPosition;
 
-    GameObject interfaceScript;
+    public GameObject azulCitosina;
+    public GameObject amareloAdenina;
+    public GameObject vermelhoTimina;
+    public GameObject verdeGuanina;
+    
+    public GameObject[] azul;
+    public GameObject[] amarelo;
+    public GameObject[] vermelho;
+    public GameObject[] verde;
+    
 
+    public void Start() {
+        
+
+        ARUserInterface.azulAnim = azulCitosina.GetComponent<Animator>();
+        ARUserInterface.amareloAnim = amareloAdenina.GetComponent<Animator>();
+        ARUserInterface.vermelhoAnim = vermelhoTimina.GetComponent<Animator>();
+        ARUserInterface.verdeAnim = verdeGuanina.GetComponent<Animator>();
+
+        for (int i = 0; i < azul.Length; i++)
+        {
+            ARUserInterface.azul[i] = azul[i];
+            print("Azul " + i);
+        }
+        for (int i = 0; i < amarelo.Length; i++)
+        {
+            ARUserInterface.amarelo[i] = amarelo[i];
+            print("Amarelo " + i);
+        }
+        for (int i = 0; i < vermelho.Length; i++)
+        {
+            ARUserInterface.vermelho[i] = vermelho[i];
+            print("Vermelho " + i);
+        }
+        for (int i = 0; i < verde.Length; i++)
+        {
+            ARUserInterface.verde[i] = verde[i];
+            print("Verde " + i);
+        }
+    }
     void Update() {
         if(Input.touchCount > 0) {
 

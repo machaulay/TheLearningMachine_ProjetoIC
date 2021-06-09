@@ -16,50 +16,295 @@ public class ARUserInterface : MonoBehaviour
     public GameObject uiCoaching; 
     public GameObject uiMain; 
     public GameObject uiDna; 
+    public GameObject uiTroca; 
 
-    
-    public GameObject Panel;
-
-    public Text txtPanel;
+    public static Animator azulAnim;
+    public static Animator amareloAnim;
+    public static Animator vermelhoAnim;
+    public static Animator verdeAnim;
 
     public Button botao1;
     public Button botao2;
     public Button botao3;
+    public Button botao4;
 
-    public GameObject dnaObjt01;
-    public GameObject dnaObjt02;
-    public GameObject dnaObjt03;
+    public Button botao5;
+    public Button botao6;
+    public Button botao7;
+    public Button botao8;
 
+    public static GameObject[] azul;
+    public static GameObject[] amarelo;
+    public static GameObject[] vermelho;
+    public static GameObject[] verde;
+
+    public Material mtAzul;
+    public Material mtAmarelo;
+    public Material mtVermelho;
+    public Material mtVerde;
+
+    private int index;
 
     void Start() {
+        azul = new GameObject[6];
+        amarelo = new GameObject[6];
+        vermelho = new GameObject[6];
+        verde = new GameObject[6];
+
         ArTapToPlaceObject = this.GetComponent<ARTapToPlaceObject>();
         arMode = false;
         dnaInterface = false;
-        Panel.SetActive(false);
+        index = 0;
+        botao1.enabled = true;
+        botao2.enabled = true;
+        botao3.enabled = true;
+        botao4.enabled = true;
 
-        botao1.onClick.AddListener(delegate {AddText(1); });
-        botao2.onClick.AddListener(delegate {AddText(2); });
-        botao3.onClick.AddListener(delegate {AddText(3); });
+        
+        botao1.onClick.AddListener(delegate {SelecionarDna(1); });
+        botao2.onClick.AddListener(delegate {SelecionarDna(2); });
+        botao3.onClick.AddListener(delegate {SelecionarDna(3); });
+        botao4.onClick.AddListener(delegate {SelecionarDna(4); });
+
+        
     }
 
-    void AddText(int Id) {
-
+    public void SelecionarDna(int Id) {
+        botao5.onClick.AddListener(delegate {; });
+        botao6.onClick.AddListener(delegate {; });
+        botao7.onClick.AddListener(delegate {; });
+        botao8.onClick.AddListener(delegate {; });
         if(Id == 1) {
-            ArTapToPlaceObject.TrocarObjetoAR(1);
-            // txtPanel.text = "Teste do botão 1";
-            // Panel.SetActive(true);
+            index++;
+            switch (index) {
+                case 1:
+                    uiTroca.GetComponent<Animator>().SetBool("on", true); 
+                    uiTroca.GetComponent<Animator>().SetBool("off", false);          
+                    azulAnim.SetBool("sai", true);
+                    azulAnim.SetBool("entra", false);
+                    botao2.interactable = false;
+                    botao3.interactable = false;
+                    botao4.interactable = false;
+
+                    botao5.onClick.AddListener(delegate {MudarDnaAzul(1); });
+                    botao6.onClick.AddListener(delegate {MudarDnaAzul(2); });
+                    botao7.onClick.AddListener(delegate {MudarDnaAzul(3); });
+                    botao8.onClick.AddListener(delegate {MudarDnaAzul(4); });
+                    break;
+                case 2:
+                    uiTroca.GetComponent<Animator>().SetBool("off", true);
+                    uiTroca.GetComponent<Animator>().SetBool("on", false);
+                    azulAnim.SetBool("entra", true);
+                    azulAnim.SetBool("sai", false);
+                    botao2.interactable = true;
+                    botao3.interactable = true;
+                    botao4.interactable = true;
+                    index = 0;
+                    break;
+            }
+            
         }else if (Id == 2) {
-            ArTapToPlaceObject.TrocarObjetoAR(2);
-            // txtPanel.text = "Teste do botão 2";
-            // Panel.SetActive(true);
+            index++;
+            switch (index) {
+                case 1:
+                    uiTroca.GetComponent<Animator>().SetBool("on", true);
+                    uiTroca.GetComponent<Animator>().SetBool("off", false);
+                    print("Azul");
+                    amareloAnim.SetBool("sai", true);
+                    amareloAnim.SetBool("entra", false);
+                    botao1.interactable = false;
+                    botao3.interactable = false;
+                    botao4.interactable = false; 
+
+                    botao5.onClick.AddListener(delegate {MudarDnaAmarelo(1); });
+                    botao6.onClick.AddListener(delegate {MudarDnaAmarelo(2); });
+                    botao7.onClick.AddListener(delegate {MudarDnaAmarelo(3); });
+                    botao8.onClick.AddListener(delegate {MudarDnaAmarelo(4); });
+                    break;
+                case 2:
+                    uiTroca.GetComponent<Animator>().SetBool("off", true);
+                    uiTroca.GetComponent<Animator>().SetBool("on", false);
+                    amareloAnim.SetBool("entra", true);
+                    amareloAnim.SetBool("sai", false);
+                    botao1.interactable = true;
+                    botao3.interactable = true;
+                    botao4.interactable = true;
+                    index = 0;
+                    break;
+            }
+            
+        }else if(Id == 3) {
+            index++;
+            switch (index)
+            {
+                case 1:
+                    uiTroca.GetComponent<Animator>().SetBool("on", true);
+                    uiTroca.GetComponent<Animator>().SetBool("off", false);
+                    vermelhoAnim.SetBool("sai", true);
+                    vermelhoAnim.SetBool("entra", false);
+                    botao1.interactable = false;
+                    botao2.interactable = false;
+                    botao4.interactable = false;
+
+                    botao5.onClick.AddListener(delegate {MudarDnaVermelho(1); });
+                    botao6.onClick.AddListener(delegate {MudarDnaVermelho(2); });
+                    botao7.onClick.AddListener(delegate {MudarDnaVermelho(3); });
+                    botao8.onClick.AddListener(delegate {MudarDnaVermelho(4); });
+                    break;
+                case 2:
+                    uiTroca.GetComponent<Animator>().SetBool("off", true);
+                    uiTroca.GetComponent<Animator>().SetBool("on", false);
+                    vermelhoAnim.SetBool("entra", true);
+                    vermelhoAnim.SetBool("sai", false);
+                    botao1.interactable = true;
+                    botao2.interactable = true;
+                    botao4.interactable = true;
+                    index = 0;
+                    break;
+            }
+        
         }else {
-            ArTapToPlaceObject.TrocarObjetoAR(3);
-            // txtPanel.text = "Teste do botão 3";
-            // Panel.SetActive(true);
+            index++;
+            switch (index)
+            {
+                case 1:
+                    uiTroca.GetComponent<Animator>().SetBool("on", true);
+                    uiTroca.GetComponent<Animator>().SetBool("off", false);
+                    verdeAnim.SetBool("sai", true);
+                    verdeAnim.SetBool("entra", false);
+                    botao1.interactable = false;
+                    botao2.interactable = false;
+                    botao3.interactable = false;
+
+                    botao5.onClick.AddListener(delegate {MudarDnaVerde(1); });
+                    botao6.onClick.AddListener(delegate {MudarDnaVerde(2); });
+                    botao7.onClick.AddListener(delegate {MudarDnaVerde(3); });
+                    botao8.onClick.AddListener(delegate {MudarDnaVerde(4); });
+                    break;
+                case 2:
+                    uiTroca.GetComponent<Animator>().SetBool("off", true);
+                    uiTroca.GetComponent<Animator>().SetBool("on", false);
+                    verdeAnim.SetBool("entra", true);
+                    verdeAnim.SetBool("sai", false);
+                    botao1.interactable = true;
+                    botao2.interactable = true;
+                    botao3.interactable = true;
+                    index = 0;
+                    break;
+            }
+
+
         }
     }
 
+    public void MudarDnaAzul(int index) {
+
+            switch (index) {
+                case 1:
+                for (int i = 0; i < azul.Length; i++) {
+                    azul[i].GetComponent<Renderer>().material = mtAzul;
+                }
+                    break;
+                case 2:
+                for (int i = 0; i < azul.Length; i++) {
+                    azul[i].GetComponent<Renderer>().material = mtAmarelo;
+                }
+                    break;
+                case 3:
+                for (int i = 0; i < azul.Length; i++) {
+                    azul[i].GetComponent<Renderer>().material = mtVermelho;
+                }
+                    break;
+                case 4:
+                for (int i = 0; i < azul.Length; i++) {
+                    azul[i].GetComponent<Renderer>().material = mtVerde;
+                }
+                    break;
+                
+            }
+    } 
+    public void MudarDnaAmarelo(int index) {
+
+            switch (index) {
+                case 1:
+                for (int i = 0; i < amarelo.Length; i++) {
+                    amarelo[i].GetComponent<Renderer>().material = mtAzul;
+                }
+                    break;
+                case 2:
+                for (int i = 0; i < amarelo.Length; i++) {
+                    amarelo[i].GetComponent<Renderer>().material = mtAmarelo;
+                }
+                    break;
+                case 3:
+                for (int i = 0; i < amarelo.Length; i++) {
+                    amarelo[i].GetComponent<Renderer>().material = mtVermelho;
+                }
+                    break;
+                case 4:
+                for (int i = 0; i < amarelo.Length; i++) {
+                    amarelo[i].GetComponent<Renderer>().material = mtVerde;
+                }
+                    break;
+                
+            }
+    } 
+    public void MudarDnaVermelho(int index) {
+
+            switch (index) {
+                case 1:
+                for (int i = 0; i < vermelho.Length; i++) {
+                    vermelho[i].GetComponent<Renderer>().material = mtAzul;
+                }
+                    break;
+                case 2:
+                for (int i = 0; i < vermelho.Length; i++) {
+                    vermelho[i].GetComponent<Renderer>().material = mtAmarelo;
+                }
+                    break;
+                case 3:
+                for (int i = 0; i < vermelho.Length; i++) {
+                    vermelho[i].GetComponent<Renderer>().material = mtVermelho;
+                }
+                    break;
+                case 4:
+                for (int i = 0; i < vermelho.Length; i++) {
+                    vermelho[i].GetComponent<Renderer>().material = mtVerde;
+                }
+                    break;
+                
+            }
+    } 
+    public void MudarDnaVerde(int index) {
+
+            switch (index) {
+                case 1:
+                for (int i = 0; i < verde.Length; i++) {
+                    verde[i].GetComponent<Renderer>().material = mtAzul;
+                }
+                    break;
+                case 2:
+                for (int i = 0; i < verde.Length; i++) {
+                    verde[i].GetComponent<Renderer>().material = mtAmarelo;
+                }
+                    break;
+                case 3:
+                for (int i = 0; i < verde.Length; i++) {
+                    verde[i].GetComponent<Renderer>().material = mtVermelho;
+                }
+                    break;
+                case 4:
+                for (int i = 0; i < verde.Length; i++) {
+                    verde[i].GetComponent<Renderer>().material = mtVerde;
+                }
+                    break;
+                
+            }
+    } 
+    
+
     void Update() {
+        
         if (arMode) {
             // 1
             SetCoachingUIVisible(false);
@@ -120,7 +365,7 @@ public class ARUserInterface : MonoBehaviour
 
 
     public void ResetaDna() {
-        ArTapToPlaceObject.TrocarObjetoAR(4);
+        SceneManager.LoadScene("DnaScene");
     }
 
 }
